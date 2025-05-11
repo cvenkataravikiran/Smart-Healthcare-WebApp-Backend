@@ -1,6 +1,6 @@
 Smart-Healthcare Web App- Backend 
 -------------------------------------------------------------------------------------------------------------------------------------------
-Backend for the Smart Healthcare - A full stack web application that helps users to track food calories, check symptoms and calculate personal health standards. Built using Node.js, Express, SQLite and integrated with USDA FoodData Central API.
+Backend for the Smart Healthcare WebApp - A full stack web application that helps users to track food calories, check symptoms and calculate personal health standards. Built using Node.js, Express, SQLite and integrated with USDA FoodData Central API.
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
