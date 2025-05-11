@@ -19,12 +19,9 @@ Features
 External API Used
 -------------------------------------------------------------------------------------------------------------------------------------------
 
-USDA FoodData Central API
-
--------------------------------------------------------------------------------------------------------------------------------------------
-For accurate calorie and nutrient information about food items.
-
-API Docs: https://fdc.nal.usda.gov/api-guide.html
+* USDA FoodData Central API
+   For accurate calorie and nutrient information about food items.
+   API Docs: https://fdc.nal.usda.gov/api-guide.html
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 Tech Stack
