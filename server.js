@@ -22,11 +22,6 @@ const healthcareDB = new sqlite3.Database('./healthcare.db', sqlite3.OPEN_READWR
     else console.log('Connected to healthcare.db.');
 });
 
-// const remaindersDB = new sqlite3.Database('./reminders.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-//     if (err) console.error('Error connecting to remainders database:', err.message);
-//     else console.log('Connected to remainders.db.');
-// });
-
 // -----------------------------------------Authentication----------------------------------------------
 
 // Register API
@@ -129,49 +124,7 @@ app.get('/api/food/search', async (req, res) => {
     }
 });
 
-// // Add food to meal log
-// app.post('/api/food/log', (req, res) => {
-//     const { user_id, food_name, calories, quantity } = req.body;
-//     const sql = `INSERT INTO food_logs (user_id, food_name, calories, quantity) VALUES (?, ?, ?, ?)`;
 
-//     healthcareDB.run(sql, [user_id, food_name, calories, quantity], function (err) {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json({ id: this.lastID, food_name, calories, quantity });
-//     });
-// });
-
-// // Get user meal log
-// app.get('/api/food/logs', (req, res) => {
-//     const { user_id } = req.query;
-//     const sql = `SELECT * FROM food_logs WHERE user_id = ? ORDER BY created_at DESC`;
-
-//     healthcareDB.all(sql, [user_id], (err, rows) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json(rows);
-//     });
-// });
-
-// // Delete food from meal log
-// app.delete('/api/food/log/:id', (req, res) => {
-//     const { id } = req.params;
-//     const sql = `DELETE FROM food_logs WHERE id = ?`;
-
-//     healthcareDB.run(sql, [id], function (err) {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json({ success: true, deletedId: id });
-//     });
-// });
-
-// // Get total calories
-// app.get('/api/food/total-calories', (req, res) => {
-//     const { user_id } = req.query;
-//     const sql = `SELECT SUM(calories) AS total_calories FROM food_logs WHERE user_id = ?`;
-
-//     healthcareDB.get(sql, [user_id], (err, row) => {
-//         if (err) return res.status(500).json({ error: err.message });
-//         res.json({ total_calories: row?.total_calories || 0 });
-//     });
-// });
 
 // -----------------------------------------BMR Feature----------------------------------------------
 
@@ -221,98 +174,6 @@ app.post("/api/bmr", (req, res) => {
         res.json({ bmr, daily_calorie_limit });
     });
 });
-
-// // -----------------------------------------Health Reminder Feature----------------------------------------------
-// const VAPID_KEYS = {
-//   publicKey: process.env.PUBLIC_VAPID_KEY,
-//   privateKey: process.env.PRIVATE_VAPID_KEY,
-// };
-
-// webPush.setVapidDetails(
-//   "mailto:your-email@example.com",
-//   VAPID_KEYS.publicKey,
-//   VAPID_KEYS.privateKey
-// ); 
-
-// // Store user subscriptions in remainders.db
-// app.post("/subscribe", (req, res) => {
-//     console.log("Received Subscription:", req.body);
-    
-//     const { endpoint, keys } = req.body;
-//     if (!endpoint || !keys?.p256dh || !keys?.auth) {
-//         return res.status(400).json({ error: "Invalid subscription object" });
-//     }
-
-//     const query = `INSERT INTO subscriptions (endpoint, keys) VALUES (?, ?)`;
-//     remaindersDB.run(query, [endpoint, JSON.stringify(keys)], function (err) {
-//         if (err) {
-//             console.error("Error saving subscription:", err.message);
-//             return res.status(500).json({ error: "Database error" });
-//         }
-//         res.status(201).json({ message: "Subscribed!" });
-//     });
-// });
-
-// // Store reminders in remainders.db
-// app.post("/set-reminder", (req, res) => {
-//     const { time, message } = req.body;
-//     console.log("Reminder Request:", req.body);
-
-//     const reminderTime = new Date(time);
-//     if (isNaN(reminderTime)) {
-//         return res.status(400).json({ error: "Invalid date format" });
-//     }
-
-//     const delay = reminderTime - new Date();
-//     console.log(delay)
-//     if (delay <= 0) {
-//         return res.status(400).json({ error: "Time must be in the future" });
-//     }
-
-//     // Insert reminder into SQLite database
-//     const query = `INSERT INTO reminders (time, message) VALUES (?, ?)`;
-//     remaindersDB.run(query, [reminderTime.toISOString(), message], function (err) {
-//         if (err) {
-//             console.error("Error saving reminder:", err.message);
-//             return res.status(500).json({ error: "Database error" });
-//         }
-
-//         setTimeout(() => {
-//             console.log('test')
-//             sendNotification(message);
-//         }, delay);
-
-//         res.json({ message: "Reminder saved!" });
-//     });
-// });
-
-
-// // Send Push Notification
-// function sendNotification(message) {
-//     remaindersDB.all('SELECT * FROM subscriptions', [], (err, rows) => {
-//         if (err) {
-//             console.error("Error fetching subscriptions:", err.message);
-//             return;
-//         }
-//    console.log(rows)
-//         rows.forEach(sub => {
-//             try {
-//                 const subscription = {
-//                     endpoint: sub.endpoint,
-//                     keys: JSON.parse(sub.keys) // Ensure it's valid JSON
-//                 };
-//                 console.log("Received Subscription:", subscription);
-
-//                 webPush.sendNotification(subscription, message)
-//                     .catch(err => console.error("Push Notification Error:", err));
-
-//             } catch (error) {
-//                 console.error("Error parsing subscription keys:", error.message);
-//             }
-//         });
-//     });
-// }
-
 // Start server
 
 app.listen(PORT, () => {
